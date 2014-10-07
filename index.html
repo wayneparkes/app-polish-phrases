@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html manifest="offline.appcache">
+	<head>
+		<meta charset="utf-8">
+		<title>Polish Phrases</title>
+
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+		<meta http-equiv="cleartype" content="on">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- <link rel="apple-touch-startup-image" href="app-startup.png"> -->
+
+		<!-- Standard iPhone --> 
+		<link rel="apple-touch-icon" sizes="57x57" href="touch-icon-iphone-114.png">
+		<!-- Retina iPhone --> 
+		<link rel="apple-touch-icon" sizes="114x114" href="touch-icon-iphone-114.png">
+		<!-- Standard iPad --> 
+		<link rel="apple-touch-icon" sizes="72x72" href="touch-icon-ipad-144.png">
+		<!-- Retina iPad --> 
+		<link rel="apple-touch-icon" sizes="144x144" href="touch-icon-ipad-144.png">
+
+		<link rel="stylesheet" type="text/css" href="assets/css/layout.css">
+
+		<script src="assets/js/bind.js"></script>
+		<script src="assets/js/events.js"></script>
+		<script src="assets/js/domReady.js"></script>
+		<script src="assets/js/audioSprite.js"></script>
+		<script src="assets/js/filter.js"></script>
+		<script src="assets/js/view.js"></script>
+		<script src="assets/js/data.js"></script>
+	</head>
+	<body>
+
+		<script>
+
+			(function(global) {
+
+				'use strict';
+
+				domReady(global, function() {
+					
+					var audio = document.createElement('audio')
+					,	supportsOgg = !!(audio.canPlayType && audio.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, ''))
+					,	supportsAac = !!(audio.canPlayType && audio.canPlayType('audio/mp4; codecs="mp4a.40.5"').replace(/no/, ''))
+					,	supportsAudio = supportsOgg || supportsAac
+					,	spriteObject;
+
+					if (supportsAudio) {
+
+						audio.preload = 'none';
+						
+						spriteObject = new AudioSprite(audio, _data);
+
+						audio.src = (supportsOgg) ? spriteObject._data.audio.ogg : spriteObject._data.audio.aac;
+						
+						// Potential to improve ui via the following custom events...
+						spriteObject
+							.on('loadstart', function() {})
+							.on('onload', function(percent) {})
+							.on('onloaded', function() {})
+							.on('play', function() {})
+							.on('progress', function(time) {})
+							.on('stop', function() {})
+						;
+					}
+
+					renderView(_data, spriteObject);
+
+				});
+
+			}(this));
+
+		</script>
+
+	</body>
+</html>
